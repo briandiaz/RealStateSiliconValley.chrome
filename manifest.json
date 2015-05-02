@@ -1,0 +1,31 @@
+{
+  "manifest_version": 2,
+
+  "name": "RealStateSiliconValley.chrome",
+  "description": "Enhance MLS listings of Silicon Valley",
+  "version": "0.1",
+  "browser_action": {
+    "default_popup": "index.html",
+    "default_title": "Real State Silicon Valley"
+  },
+  "icons": {
+      "16": "assets/imgs/logo-16-disabled.png",
+      "24": "assets/imgs/logo-24-disabled.png",
+      "32": "assets/imgs/logo-32-disabled.png",
+      "48": "assets/imgs/logo-48-disabled.png"
+  },
+  "permissions": [
+    "http://*.mlslistings.com/", 
+    "https://*.mlslistings.com/"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://mlslistings.com/*",
+        "http://*.mlslistings.com/*"
+      ],
+      "js": ["assets/js/jquery-1.11.2.min.js", "assets/js/app.js"],
+      "run_at" : "document_end"
+    }
+  ]
+}
