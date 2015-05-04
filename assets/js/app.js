@@ -180,7 +180,7 @@ $(document).ready(function(){
 					var reviewsLink = get_value_from_node(nearby_school.getElementsByTagName("reviewsLink"));
 					var lat = get_value_from_node(nearby_school.getElementsByTagName("lat"));
 					var lon = get_value_from_node(nearby_school.getElementsByTagName("lon"));
-					var map = "https://www.google.com.do/maps/dir/"+lat+","+lon+"&markers=color:green?hl=en";
+					var map = "https://www.google.com.do/maps/dir/"+lat+","+lon;
 					dialog += '<tr><td style="width:150px">'+school_name+'</td><td style="width:150px">'+gsRating+'</td><td style="width:150px">'+gradeRange+'</td><td style="width:150px"><a target="_blank" href="'+map+'">See Map</a></td></tr>';	
 				}
 
