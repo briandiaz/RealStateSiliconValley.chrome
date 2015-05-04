@@ -16,7 +16,10 @@
   },
   "permissions": [
     "http://*.mlslistings.com/", 
-    "https://*.mlslistings.com/"
+    "https://*.mlslistings.com/",
+    "http://api.greatschools.org/schools/nearby",
+    "http://*.greatschools.org/*",
+    "http://greatschools.org/*"
   ],
   "content_scripts": [
     {
@@ -24,7 +27,10 @@
         "http://mlslistings.com/*",
         "http://*.mlslistings.com/*"
       ],
-      "js": ["assets/js/jquery-1.11.2.min.js", "assets/js/app.js"],
+      "js": [
+        "assets/js/jquery-1.11.2.min.js", 
+        "assets/js/app.js"
+      ],
       "run_at" : "document_end"
     }
   ]
