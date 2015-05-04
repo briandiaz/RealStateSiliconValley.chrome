@@ -1,4 +1,12 @@
 
+function encodeURLParam(param) {
+  return param.replace(new RegExp(' ', 'g'), "+");
+}
+
+function replaceCommas(param) {
+  return param.replace(new RegExp(',', 'g'), "");
+}
+
 function MLSProperty(mls_number, sent_date, status, street_address, price, dom, bedrooms, bathrooms, squarefeet, lot_size, city, age, change_date, change_type) {
     this.sent_date = sent_date;
     this.mls_number = mls_number;
@@ -50,13 +58,14 @@ function ApiRequest(api_url, params, dataType){
 		var response_data = null;
 	    $.ajax({
 	      type: method,
-	      url: api_url,
+	      url: this.api_url,
 	      data: this.params,
 	      dataType: this.dataType,
 	      async: false,
 	      statusCode: {
 	        200: function(data) {
-	          response_data = data.responseText;
+	          response_data = (this.dataType == 'text/xml') ? data.responseText : data;
+
 	        },
 	        500: function(xhr, textStatus, errorThrown) {
 	        	console.log(xhr.Status +" " + xhr.StatusDescription + "\n" + errorThrown);
@@ -108,22 +117,52 @@ function GreatSchool(apikey, state, city){
 		var request = new ApiRequest("http://api.greatschools.org/schools/nearby", params, 'text/xml');
 		return request.get();
 	};
-
-	function encodeURLParam(param) {
-	  return param.replace(new RegExp(' ', 'g'), "+");
-	}
 }
+
+function GoogleMaps(){
+	
+}
+
+GoogleMaps.get_distance_json = function(origins, destinations, mode, language, sensor){
+	var params = {origins: origins, destinations: destinations, mode: mode, language: language, sensor: sensor};
+	var request = new ApiRequest("http://maps.googleapis.com/maps/api/distancematrix/json", params, 'json');
+	return request.get();
+};
+
+GoogleMaps.get_distance = function(origins, destinations, mode, language, sensor){
+	return this.get_distance_json(origins, destinations, mode, language, sensor).rows[0].elements[0].distance.text;
+};
+
 
 
 $(document).ready(function(){
-	
+	var home_origin = replaceCommas(encodeURLParam("San Francisco 1 360 S Market St, San Jose, CA, 95113"));
+	var work_origin = replaceCommas(encodeURLParam("San Francisco 1 Infinite Loop, Cupertino, CA, 94014"));
+	var destinations = "";
 	var properties = [];
+	$(".portalContent").css("width","1350px");
+	$("#_ctl0_m_pnlRenderedDisplay table table:first").find("tr:last").append('<td style="width:110px;"><span style="width:110px;">Work Distance </span></td>');
+	$("#_ctl0_m_pnlRenderedDisplay table table:first").find("tr:last").append('<td style="width:110px;"><span style="width:110px;">Home Distance</span></td>');
+
 	$(".d1085m_show table table").each(function(){
 		var property = MLSProperty.parseProperty($(this));
 		properties.push(property);
+		//var school = get_nearby_school(properties[0]);		
+		destinations += replaceCommas(encodeURLParam("San+Francisco+"+property.street_address)) + "|";
 		
 	});
+
+	var work_distances = GoogleMaps.get_distance_json(work_origin, destinations, "driving", "en", false);
+	var home_distances = GoogleMaps.get_distance_json(home_origin, destinations, "driving", "en", false);
+	var index = 0;
 	
+	
+	$(".d1085m_show table table").each(function(){
+		$(this).find("tr:last").append('<td style="width:110px;">'+home_distances.rows[0].elements[index].distance.text+"</td>");
+		$(this).find("tr:last").append('<td style="width:110px;">'+work_distances.rows[0].elements[index].distance.text+"</td>");
+		index++;
+	});
+
 	function get_nearby_schools(properties){
 		var nearby_schools = [];
 		var schools = new GreatSchool("wksvxijz7xpio3ec5wy9paxx", "CA", "San Francisco");
@@ -139,6 +178,4 @@ $(document).ready(function(){
 		var schools = new GreatSchool("wksvxijz7xpio3ec5wy9paxx", "CA", "San Francisco");
 		return schools.nearby(property.street_address);
 	}
-	var school = get_nearby_school(properties[0]);
-	console.log(school);
 });
