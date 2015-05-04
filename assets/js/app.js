@@ -192,12 +192,12 @@ $(document).ready(function(){
 		}
 
 		$(this).closest("div").append(dialog);
-
+		
 		index++;
 	});
 
-	$('.data_table').DataTable();
-
+	$('.data_table').DataTable({"order": [[ 1, "desc" ]]});
+	
 	function get_value_from_node(node){
 		if(typeof node[0] !== "undefined" && node !== null){
 			var data = node[0];
@@ -247,15 +247,7 @@ $(document).ready(function(){
 		index++;
 	});
 
-	function get_nearby_schools(properties){
-		var nearby_schools = [];
-		var schools = new GreatSchool("wksvxijz7xpio3ec5wy9paxx", "CA", "San Francisco", 30);
-		for (var i = 0; i < properties.length; i++) {
-			nearby_schools.push(schools.nearby(properties[i].street_address))
-		};
 		
-		return nearby_schools;	
-	}
 
 	function get_nearby_school(property){
 		var schools = new GreatSchool("wksvxijz7xpio3ec5wy9paxx", "CA", "San Francisco", 30);

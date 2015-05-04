@@ -57,10 +57,10 @@
        "assets/jqueryUI/images/ui-icons_f08000_256x240.png",
        "assets/jqueryUI/images/ui-icons_ff7519_256x240.png",
        "assets/jqueryUI/images/ui-icons_ffffff_256x240.png",
-       "assets/jqueryUI/images/sort_asc.png",
-       "assets/jqueryUI/images/sort_asc_disabled.png",
-       "assets/jqueryUI/images/sort_both.png",
-       "assets/jqueryUI/images/sort_desc.png",
-       "assets/jqueryUI/images/sort_desc_disabled.png"
+       "assets/imgs/sort_asc.png",
+       "assets/imgs/sort_asc_disabled.png",
+       "assets/imgs/sort_both.png",
+       "assets/imgs/sort_desc.png",
+       "assets/imgs/sort_desc_disabled.png"
      ]
 }
