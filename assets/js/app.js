@@ -135,8 +135,8 @@ GoogleMaps.get_distance = function(origins, destinations, mode, language, sensor
 };
 
 $(document).ready(function(){
-	var home_origin = replaceCommas(encodeURLParam("San Francisco 360 S Market St, San Jose, CA, 95113"));
-	var work_origin = replaceCommas(encodeURLParam("San Francisco Infinite Loop, Cupertino, CA, 94014"));
+	var home_origin = replaceCommas(encodeURLParam("360 S Market St,San Jose,CA 95113, USA"));
+	var work_origin = replaceCommas(encodeURLParam("Apple Campus, Cupertino, CA 95014, USA"));
 	var destinations = "";
 	var properties = [];
 	var index = 0;
@@ -197,7 +197,7 @@ $(document).ready(function(){
 	});
 
 	$('.data_table').DataTable({"order": [[ 1, "desc" ]]});
-	
+
 	function get_value_from_node(node){
 		if(typeof node[0] !== "undefined" && node !== null){
 			var data = node[0];
@@ -214,7 +214,7 @@ $(document).ready(function(){
 		$('.dialog_'+mls_property_index).css("max-height","450px");
 		$('.dialog_'+mls_property_index).css("overflow","auto");
 		$('.dialog_'+mls_property_index).dialog({
-		    height: 450,
+		    height: 600,
 		    width: 600,
 		    modal: true,
 		    resizable: true
@@ -247,7 +247,7 @@ $(document).ready(function(){
 		index++;
 	});
 
-		
+	
 
 	function get_nearby_school(property){
 		var schools = new GreatSchool("wksvxijz7xpio3ec5wy9paxx", "CA", "San Francisco", 30);

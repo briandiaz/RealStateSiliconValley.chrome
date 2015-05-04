@@ -9,6 +9,7 @@
 .ui-helper-hidden {
 	display: none;
 }
+.noTitleBar .ui-dialog-titlebar {display:none}
 .ui-helper-hidden-accessible {
 	border: 0;
 	clip: rect(0 0 0 0);
