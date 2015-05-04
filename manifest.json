@@ -28,10 +28,32 @@
         "http://*.mlslistings.com/*"
       ],
       "js": [
-        "assets/js/jquery-1.11.2.min.js", 
+        "assets/js/jquery-1.11.2.min.js",
+        "assets/jqueryUI/jquery-ui.min.js",
         "assets/js/app.js"
+      ],
+      "css" : [
+        "assets/jqueryUI/jquery-ui.css",
+        "assets/jqueryUI/jquery-ui.structure.min.css",
+        "assets/jqueryUI/jquery-ui.theme.css"
       ],
       "run_at" : "document_end"
     }
-  ]
+  ],
+   "web_accessible_resources": [
+       "assets/jqueryUI/images/ui-bg_flat_75_aaaaaa_40x100.png",
+       "assets/jqueryUI/images/ui-bg_glass_25_cb842e_1x400.png",
+       "assets/jqueryUI/images/ui-bg_glass_70_ede4d4_1x400.png",
+       "assets/jqueryUI/images/ui-bg_glass_100_f5f0e5_1x400.png",
+       "assets/jqueryUI/images/ui-bg_highlight-hard_65_fee4bd_1x100.png",
+       "assets/jqueryUI/images/ui-bg_highlight-hard_75_f5f5b5_1x100.png",
+       "assets/jqueryUI/images/ui-bg_highlight-hard_100_f4f0ec_1x100.png",
+       "assets/jqueryUI/images/ui-bg_inset-soft_100_f4f0ec_1x100.png",
+       "assets/jqueryUI/images/ui-icons_c47a23_256x240.png",
+       "assets/jqueryUI/images/ui-icons_cb672b_256x240.png",
+       "assets/jqueryUI/images/ui-icons_f35f07_256x240.png",
+       "assets/jqueryUI/images/ui-icons_f08000_256x240.png",
+       "assets/jqueryUI/images/ui-icons_ff7519_256x240.png",
+       "assets/jqueryUI/images/ui-icons_ffffff_256x240.png"
+     ]
 }
