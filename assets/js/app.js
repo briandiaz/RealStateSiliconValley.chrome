@@ -123,14 +123,14 @@ function GoogleMaps(){
 	
 }
 
-GoogleMaps.get_distance_json = function(origins, destinations, mode, language, sensor){
-	var params = {origins: origins, destinations: destinations, mode: mode, language: language, sensor: sensor};
+GoogleMaps.get_distance_json = function(origins, destinations, mode, language, sensor, units){
+	var params = {origins: origins, destinations: destinations, mode: mode, language: language, sensor: sensor, units: units};
 	var request = new ApiRequest("http://maps.googleapis.com/maps/api/distancematrix/json", params, 'json');
 	return request.get();
 };
 
-GoogleMaps.get_distance = function(origins, destinations, mode, language, sensor){
-	return this.get_distance_json(origins, destinations, mode, language, sensor).rows[0].elements[0].distance.text;
+GoogleMaps.get_distance = function(origins, destinations, mode, language, sensor, units){
+	return this.get_distance_json(origins, destinations, mode, language, sensor, units).rows[0].elements[0].distance.text;
 };
 
 
@@ -154,8 +154,8 @@ $(document).ready(function(){
 	});
 
 
-	var work_distances = GoogleMaps.get_distance_json(work_origin, destinations, "driving", "en", false);
-	var home_distances = GoogleMaps.get_distance_json(home_origin, destinations, "driving", "en", false);
+	var work_distances = GoogleMaps.get_distance_json(work_origin, destinations, "driving", "en", false, "imperial");
+	var home_distances = GoogleMaps.get_distance_json(home_origin, destinations, "driving", "en", false, "imperial");
 	var index = 0;
 
 	console.log(JSON.stringify(work_distances));
