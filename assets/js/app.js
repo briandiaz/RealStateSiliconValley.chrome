@@ -160,7 +160,7 @@ $(document).ready(function(){
 		$(this).data("mls-property-index", index);
 		$(this).css("cursor","pointer");
 
-		var dialog = '<div style="display:none;" class="dialog_'+index+'" title="Schools"><table><thead><tr><th style="width:150px"><b>Name</b></th><th style="width:150px"><b>Rating</b></th><th style="width:150px"><b>Grade Range</b></th><th style="width:150px"><b>Map</b></th></tr></thead>';
+		var dialog = '<div style="display:none;" class="dialog_'+index+'" title="Schools"><table class="data_table"><thead><tr><th style="width:150px"><b>Name</b></th><th style="width:150px"><b>Rating</b></th><th style="width:150px"><b>Grade Range</b></th><th style="width:150px"><b>Map</b></th></tr></thead>';
 		
 		if(data != null && typeof data !== "undefined"){
 			for (var i = 0; i < data.length; i++) {
@@ -192,8 +192,11 @@ $(document).ready(function(){
 		}
 
 		$(this).closest("div").append(dialog);
+
 		index++;
 	});
+
+	$('.data_table').DataTable();
 
 	function get_value_from_node(node){
 		if(typeof node[0] !== "undefined" && node !== null){

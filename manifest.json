@@ -30,10 +30,12 @@
       "js": [
         "assets/js/jquery-1.11.2.min.js",
         "assets/jqueryUI/jquery-ui.min.js",
+        "assets/js/jquery.dataTables.min.js",
         "assets/js/app.js"
       ],
       "css" : [
         "assets/jqueryUI/jquery-ui.css",
+        "assets/css/jquery.dataTables.css",
         "assets/jqueryUI/jquery-ui.structure.min.css",
         "assets/jqueryUI/jquery-ui.theme.css"
       ],
@@ -54,6 +56,11 @@
        "assets/jqueryUI/images/ui-icons_f35f07_256x240.png",
        "assets/jqueryUI/images/ui-icons_f08000_256x240.png",
        "assets/jqueryUI/images/ui-icons_ff7519_256x240.png",
-       "assets/jqueryUI/images/ui-icons_ffffff_256x240.png"
+       "assets/jqueryUI/images/ui-icons_ffffff_256x240.png",
+       "assets/jqueryUI/images/sort_asc.png",
+       "assets/jqueryUI/images/sort_asc_disabled.png",
+       "assets/jqueryUI/images/sort_both.png",
+       "assets/jqueryUI/images/sort_desc.png",
+       "assets/jqueryUI/images/sort_desc_disabled.png"
      ]
 }
