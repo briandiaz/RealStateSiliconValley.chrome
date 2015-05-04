@@ -152,7 +152,7 @@ $(document).ready(function(){
 		var property = MLSProperty.parseProperty($(this));
 		properties.push(property);
 		
-		destinations += replaceCommas(encodeURLParam("San+Francisco+" + property.city + "+"+ property.street_address)) +  "|";
+		destinations += replaceCommas(encodeURLParam(property.city + "+"+ property.street_address)) +  "|";
 
 		var schools = $.parseXML(get_nearby_school(properties[index]));
 		var data = (schools != null) ? schools.getElementsByTagName("school") : null;
