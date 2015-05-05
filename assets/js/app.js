@@ -22,12 +22,16 @@ function MLSProperty(mls_number, sent_date, status, street_address, price, dom, 
     this.age = age;
     this.change_date = change_date;
     this.change_type = change_type;
+    this.lat = 0;
+    this.lon = 0;
 
-    this.to_s = function(){
-    	return this.mls_number + " " + this.sent_date + " " + this.status + " " + this.street_address 
-    	+ " " + this.price + " " + this.dom + " " + this.bedrooms + " " + this.bathrooms + " " + this.squarefeet 
-    	+ " " + this.lot_size + " " + this.city + " " + this.age + " " + this.change_date  + " " + this.change_type;
+    this.set_lat_lon = function(){
+    	var data = GoogleMaps.get_lat_lon(encodeURLParam(this.street_address + "," + this.city));
+    	var lat_lon = data.results[0].geometry.location;
+    	this.lat = lat_lon.lat;
+    	this.lon = lat_lon.lng;
     };
+
 }
 
 MLSProperty.parseProperty = function(data){
@@ -103,7 +107,7 @@ function ApiRequest(api_url, params, dataType){
 	};
 
 	this.json_response = function(request){
-		return JSON.parse(request.responseText)
+		return JSON.parse(request.responseText);
 	};
 }
 
@@ -118,11 +122,17 @@ function GreatSchool(apikey, state, city, radius){
 		var request = new ApiRequest("http://api.greatschools.org/schools/nearby", params, 'text/xml');
 		return request.get();
 	};
+
 }
 
-function GoogleMaps(){
-	
+GreatSchool.assignedSchools = function(lat, lon){
+	var params = {lat: lat, lon: lon};
+	var request = new ApiRequest("http://www.gscdn.org/geo/boundary/ajax/getAssignedSchoolByLocation.json", params, 'json');
+	return request.get();
+
 }
+
+function GoogleMaps(){ }
 
 GoogleMaps.get_distance_json = function(origins, destinations, mode, language, sensor, units){
 	var params = {origins: origins, destinations: destinations, mode: mode, language: language, sensor: sensor, units: units};
@@ -134,6 +144,12 @@ GoogleMaps.get_distance = function(origins, destinations, mode, language, sensor
 	return this.get_distance_json(origins, destinations, mode, language, sensor, units).rows[0].elements[0].distance.text;
 };
 
+GoogleMaps.get_lat_lon = function(origin){
+	var params = {address: origin};
+	var request = new ApiRequest("http://maps.googleapis.com/maps/api/geocode/json", params, 'json');
+	return request.get();
+};
+
 $(document).ready(function(){
 	var home_origin = replaceCommas(encodeURLParam("360 S Market St,San Jose,CA 95113, USA"));
 	var work_origin = replaceCommas(encodeURLParam("Apple Campus, Cupertino, CA 95014, USA"));
@@ -142,44 +158,35 @@ $(document).ready(function(){
 	var index = 0;
 
 	
-
-
 	$(".portalContent").css("width","1350px");
-	$("#_ctl0_m_pnlRenderedDisplay table table:first").find("tr:last").append('<td style="width:110px;"><span style="width:110px;">Work Distance </span></td>');
-	$("#_ctl0_m_pnlRenderedDisplay table table:first").find("tr:last").append('<td style="width:110px;"><span style="width:110px;">Home Distance</span></td>');
+	$("#_ctl0_m_pnlRenderedDisplay table table:first").find("tr:last").append('<td style="width:120px;"><span style="width:120px;">Work Distance</span></td>');
+	$("#_ctl0_m_pnlRenderedDisplay table table:first").find("tr:last").append('<td style="width:120px;"><span style="width:120px;">Home Distance</span></td>');
 
 	$(".d1085m_show table table").each(function(){
 		var property = MLSProperty.parseProperty($(this));
+		property.set_lat_lon();
 		properties.push(property);
 		
 		destinations += replaceCommas(encodeURLParam(property.city + "+"+ property.street_address)) +  "|";
 
-		var schools = $.parseXML(get_nearby_school(properties[index]));
-		var data = (schools != null) ? schools.getElementsByTagName("school") : null;
+		var schools = GreatSchool.assignedSchools(properties[index].lat, properties[index].lon);
 		
 		$(this).data("mls-property-index", index);
 		$(this).css("cursor","pointer");
 
 		var dialog = '<div style="display:none;" class="dialog_'+index+'" title="Schools"><table class="data_table"><thead><tr><th style="width:150px"><b>Name</b></th><th style="width:150px"><b>Rating</b></th><th style="width:150px"><b>Grade Range</b></th><th style="width:150px"><b>Map</b></th></tr></thead>';
 		
-		if(data != null && typeof data !== "undefined"){
-			for (var i = 0; i < data.length; i++) {
+		if(schools != null && typeof schools !== "undefined"){
+			for (var i = 0; i < schools.results.length; i++) {
 				
-				var nearby_school = data[i];
+				var assigned_school = schools.results[i].schools[0];
 
-				if (nearby_school !== null && typeof nearby_school !== "undefined" && get_value_from_node(nearby_school.getElementsByTagName("gsRating")) !== 'None'){
-					var school_name = get_value_from_node(nearby_school.getElementsByTagName("name"));
-					var gsRating = get_value_from_node(nearby_school.getElementsByTagName("gsRating"));
-					var gradeRange = get_value_from_node(nearby_school.getElementsByTagName("gradeRange"));
-					var enrollment = get_value_from_node(nearby_school.getElementsByTagName("enrollment"));
-					var phone = get_value_from_node(nearby_school.getElementsByTagName("phone"));
-					var fax = get_value_from_node(nearby_school.getElementsByTagName("fax"));
-					var distance = get_value_from_node(nearby_school.getElementsByTagName("distance"));
-					var overviewLink = get_value_from_node(nearby_school.getElementsByTagName("overviewLink"));
-					var ratingsLink = get_value_from_node(nearby_school.getElementsByTagName("ratingsLink"));
-					var reviewsLink = get_value_from_node(nearby_school.getElementsByTagName("reviewsLink"));
-					var lat = get_value_from_node(nearby_school.getElementsByTagName("lat"));
-					var lon = get_value_from_node(nearby_school.getElementsByTagName("lon"));
+				if (assigned_school !== null && typeof assigned_school !== "undefined"){
+					var school_name = assigned_school.name;
+					var gsRating = assigned_school.rating;
+					var gradeRange = assigned_school.gradeRange;
+					var lat = assigned_school.lat;
+					var lon = assigned_school.lon;
 					var map = "https://www.google.com.do/maps/dir/"+lat+","+lon;
 					dialog += '<tr><td style="width:150px">'+school_name+'</td><td style="width:150px">'+gsRating+'</td><td style="width:150px">'+gradeRange+'</td><td style="width:150px"><a target="_blank" href="'+map+'">See Map</a></td></tr>';	
 				}
@@ -214,7 +221,7 @@ $(document).ready(function(){
 		$('.dialog_'+mls_property_index).css("max-height","450px");
 		$('.dialog_'+mls_property_index).css("overflow","auto");
 		$('.dialog_'+mls_property_index).dialog({
-		    height: 600,
+		    height: 300,
 		    width: 600,
 		    modal: true,
 		    resizable: true
@@ -231,26 +238,20 @@ $(document).ready(function(){
 		var text_home;
 		var text_work;
 		if(home_school_distance !== null && typeof home_school_distance !== "undefined"){
-			text_home = '<td style="width:110px;">'+home_school_distance.distance.text+"</td>";
+			text_home = '<td style="width:120px;"><b>'+home_school_distance.distance.text+"</b> ("+home_school_distance.duration.text+")</td>";
 		}
 		else{
-			text_home = '<td style="width:110px;">Not Found</td>';
+			text_home = '<td style="width:120px;">Not Found</td>';
 		}
 		if(work_school_distance !== null && typeof work_school_distance !== "undefined"){
-			text_work = '<td style="width:110px;">'+work_school_distance.distance.text+"</td>";
+			text_work = '<td style="width:120px;"><b>'+work_school_distance.distance.text+"</b> ("+work_school_distance.duration.text+")</td>";
 		}
 		else{
-			text_work = '<td style="width:110px;">Not Found</td>';
+			text_work = '<td style="width:120px;">Not Found</td>';
 		}
 		$(this).find("tr:last").append(text_home);
 		$(this).find("tr:last").append(text_work);
 		index++;
 	});
-
 	
-
-	function get_nearby_school(property){
-		var schools = new GreatSchool("wksvxijz7xpio3ec5wy9paxx", "CA", "San Francisco", 30);
-		return schools.nearby(property.street_address);
-	}
 });

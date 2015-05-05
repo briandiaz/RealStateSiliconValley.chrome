@@ -19,7 +19,10 @@
     "https://*.mlslistings.com/",
     "http://api.greatschools.org/schools/nearby",
     "http://*.greatschools.org/*",
-    "http://*.googleapis.com/*"
+    "http://*.googleapis.com/*",
+    "http://www.gscdn.org/",
+    "http://www.gscdn.org/*",
+    "http://*.gscdn.org/*"   
   ],
   "content_scripts": [
     {
