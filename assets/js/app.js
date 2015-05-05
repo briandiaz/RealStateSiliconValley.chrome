@@ -159,13 +159,21 @@ $(document).ready(function(){
 
 	
 	$(".portalContent").css("width","1350px");
-	$("#_ctl0_m_pnlRenderedDisplay table table:first").find("tr:last").append('<td style="width:120px;"><span style="width:120px;">Work Distance</span></td>');
-	$("#_ctl0_m_pnlRenderedDisplay table table:first").find("tr:last").append('<td style="width:120px;"><span style="width:120px;">Home Distance</span></td>');
+
+	$("#_ctl0_m_pnlRenderedDisplay table table:first tbody tr td:contains('Chg Type')").hide();
+
+	$("#_ctl0_m_pnlRenderedDisplay table table:first").find("tr:last")
+		.append('<td style="width:100px;"><span style="width:100px;">School Ratings</span></td>')
+		.append('<td style="width:120px;"><span style="width:120px;">Work Distance</span></td>')
+		.append('<td style="width:120px;"><span style="width:120px;">Home Distance</span></td>');
+
+
 
 	$(".d1085m_show table table").each(function(){
 		var property = MLSProperty.parseProperty($(this));
 		property.set_lat_lon();
 		properties.push(property);
+		$(this).find(".d1085m26").hide();
 		
 		destinations += replaceCommas(encodeURLParam(property.city + "+"+ property.street_address)) +  "|";
 
@@ -175,7 +183,7 @@ $(document).ready(function(){
 		$(this).css("cursor","pointer");
 
 		var dialog = '<div style="display:none;" class="dialog_'+index+'" title="Schools"><table class="data_table"><thead><tr><th style="width:150px"><b>Name</b></th><th style="width:150px"><b>Rating</b></th><th style="width:150px"><b>Grade Range</b></th><th style="width:150px"><b>Map</b></th></tr></thead>';
-		
+		var school_table_text = "";
 		if(schools != null && typeof schools !== "undefined"){
 			for (var i = 0; i < schools.results.length; i++) {
 				
@@ -189,6 +197,7 @@ $(document).ready(function(){
 					var lon = assigned_school.lon;
 					var map = "https://www.google.com.do/maps/dir/"+lat+","+lon;
 					dialog += '<tr><td style="width:150px">'+school_name+'</td><td style="width:150px">'+gsRating+'</td><td style="width:150px">'+gradeRange+'</td><td style="width:150px"><a target="_blank" href="'+map+'">See Map</a></td></tr>';	
+					school_table_text += "<b>" + gsRating +  "</b> - ";
 				}
 
 			}	
@@ -197,8 +206,9 @@ $(document).ready(function(){
 		else{
 			dialog += '</table><b>No Schools found.</b></div>';
 		}
-
+		school_table_text = school_table_text.slice(0,school_table_text.length - 3);
 		$(this).closest("div").append(dialog);
+		$(this).find("tr:last").append("<td style='width:100px;text-align:center'>"+school_table_text+"</td>");
 		
 		index++;
 	});
